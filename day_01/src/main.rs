@@ -1,3 +1,5 @@
+mod locations;
 fn main() {
-    println!("Hello, world!");
+    let file_path = "data.txt";
+    locations::run(file_path);
 }
