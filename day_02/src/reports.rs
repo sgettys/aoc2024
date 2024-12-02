@@ -29,7 +29,7 @@ fn read_data(file_path: &str) -> Result<i32, io::Error> {
                 eprintln!("Invalid number: {}", num);
             }
         }
-        if is_data_safe(&numbers) {
+        if is_data_safe(&numbers) || dampen_data_safe(&numbers) {
             safe += 1;
         } else {
         }
@@ -55,4 +55,17 @@ fn is_data_safe(data: &[i32]) -> bool {
         }
     }
     true
+}
+
+// Don't like this brute force approach.. Need to use backtracking
+fn dampen_data_safe(data: &[i32]) -> bool {
+    for i in 0..data.len() {
+        // slice out the current number
+        let mut slice = data.to_vec();
+        slice.remove(i);
+        if is_data_safe(&slice) {
+            return true;
+        }
+    }
+    false
 }
