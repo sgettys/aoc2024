@@ -1,0 +1,76 @@
+# Compiled output
+target/
+
+# Rust/Cargo-specific files
+**/*.rs.bk
+Cargo.lock    # Optional if you're building libraries, but include for applications
+
+# Dependencies
+/.cargo/
+
+# Binaries
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Editor and IDE files
+# JetBrains IDEs (IntelliJ, CLion, etc.)
+.idea/
+*.iml
+
+# VSCode
+.vscode/
+*.code-workspace
+
+# Vim/Neovim
+*.swp
+*.swo
+*.swn
+*.un~
+*.nvimlog
+
+# Emacs
+*~
+*.elc
+*.ln
+.#*
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*.pid
+*.seed
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.old
+
+# Build artifacts and intermediate files
+/debug/
+release/
+*.profdata
+*.profraw
+
+# Coverage
+/coverage/
+
+# Rust build tools
+/benchmarks/
+/perf/
+
+# Specific tools
+/tests/**/*.stderr
+/tests/**/*.stdout
