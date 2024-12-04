@@ -1,33 +1,7 @@
 use regex::Regex;
-use std::fs::File;
-use std::io::{self, Read};
-use std::path::Path;
 
-pub fn run(file_path: &str) {
-    match read_data(file_path) {
-        Ok(total) => {
-            println!("total: {:?}", total);
-        }
-        Err(e) => {
-            eprintln!("Error reading data: {}", e);
-        }
-    }
-}
-
-fn read_data(file_path: &str) -> Result<i32, io::Error> {
-    let path = Path::new(file_path);
-    let mut file = File::open(path)?;
-    let mut content = String::new();
-
-    // Read the entire file into the string
-    file.read_to_string(&mut content)?;
-
-    // Process the full content
-    let total = get_total(&content);
-    Ok(total)
-}
-
-fn get_total(line: &str) -> i32 {
+// YUCK
+pub fn parse_and_compute(line: &str) {
     let mut total = 0;
     // partial pattern
     let partial_pattern = Regex::new(r"^m(u(l(\(\d*(,\d*)?)?)?)?$").unwrap();
@@ -38,8 +12,6 @@ fn get_total(line: &str) -> i32 {
     let mut expression = String::new();
     let mut enabled_expression = String::new();
     let mut enabled = true;
-    let mut dos = 0;
-    let mut donts = 0;
     for ch in line.chars() {
         let new_expression = format!("{}{}", expression, ch);
         let new_enabled_expression = format!("{}{}", enabled_expression, ch);
@@ -48,14 +20,10 @@ fn get_total(line: &str) -> i32 {
             if let Some(captures) = full_enable.captures(&enabled_expression) {
                 let keyword = captures.get(1).unwrap().as_str();
                 if keyword == "do" {
-                    if !enabled {
-                        dos += 1;
-                    }
+                    if !enabled {}
                     enabled = true;
                 } else if keyword == "don't" {
-                    if enabled {
-                        donts += 1;
-                    }
+                    if enabled {}
                     enabled = false;
                 }
 
@@ -75,7 +43,6 @@ fn get_total(line: &str) -> i32 {
                     .split(|c| c == '(' || c == ')' || c == ',')
                     .filter(|s| !s.is_empty()) // Remove empty strings
                     .collect();
-                println!("parts: {:?}", parts);
                 if parts.len() == 3 {
                     if let (Ok(a), Ok(b)) = (parts[1].parse::<i32>(), parts[2].parse::<i32>()) {
                         total += a * b;
@@ -89,6 +56,5 @@ fn get_total(line: &str) -> i32 {
             }
         }
     }
-    println!("dos: {}, donts: {}", dos, donts);
-    total
+    println!("Total: {}", total);
 }
