@@ -1,27 +1,8 @@
-use std::fs::File;
-use std::io::{self, BufRead};
-use std::path::Path;
-
-pub fn run(file_path: &str) {
-    match read_data(file_path) {
-        Ok(safe) => {
-            println!("safe: {:?}", safe);
-        }
-        Err(e) => {
-            eprintln!("Error reading data: {}", e);
-        }
-    }
-}
-
-fn read_data(file_path: &str) -> Result<i32, io::Error> {
-    let path = Path::new(file_path);
-    let file = File::open(path)?;
-    let reader = io::BufReader::new(file);
-
+pub fn run(input: &str) {
     let mut safe = 0;
-    for line in reader.lines() {
+    for line in input.lines() {
         let mut numbers = Vec::new();
-        let line = line?;
+        let line = line;
         for num in line.split_whitespace() {
             if let Ok(number) = num.parse::<i32>() {
                 numbers.push(number);
@@ -34,7 +15,7 @@ fn read_data(file_path: &str) -> Result<i32, io::Error> {
         } else {
         }
     }
-    Ok(safe)
+    println!("Safe: {}", safe);
 }
 
 fn is_data_safe(data: &[i32]) -> bool {

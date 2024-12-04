@@ -1,6 +1,6 @@
 mod reports;
 
 fn main() {
-    let file_path = "data.txt";
-    reports::run(file_path);
+    let input = include_str!("../input/input.txt");
+    reports::run(input);
 }
