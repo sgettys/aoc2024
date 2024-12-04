@@ -1,23 +1,11 @@
 use std::collections::HashMap;
-use std::fs::File;
-use std::io::{self, BufRead};
 
-pub fn run(file_path: &str) {
-    match read_data(file_path) {
-        Ok(similarity) => println!("Similarity score: {}", similarity),
-        Err(e) => eprintln!("Error: {}", e),
-    }
-}
-
-fn read_data(file_path: &str) -> Result<i32, io::Error> {
-    let file = File::open(file_path)?;
-    let reader = io::BufReader::new(file);
-
+pub fn run(input: &str) {
     let mut list_a = Vec::new();
     let mut list_b = Vec::new();
 
-    for line in reader.lines() {
-        let line = line?;
+    for line in input.lines() {
+        let line = line;
         let parts: Vec<_> = line.split_whitespace().collect();
 
         if let [a, b] = parts.as_slice() {
@@ -35,13 +23,13 @@ fn read_data(file_path: &str) -> Result<i32, io::Error> {
 
     list_a.sort_unstable();
     list_b.sort_unstable();
-
-    Ok(get_similarity_score(&list_a, &list_b))
+    let similarity = get_similarity_score(&list_a, &list_b);
+    println!("Similarity: {}", similarity);
 }
 
-fn get_distance(list_a: &[i32], list_b: &[i32]) -> i32 {
-    list_a.iter().zip(list_b).map(|(a, b)| (a - b).abs()).sum()
-}
+// fn get_distance(list_a: &[i32], list_b: &[i32]) -> i32 {
+//     list_a.iter().zip(list_b).map(|(a, b)| (a - b).abs()).sum()
+// }
 
 fn get_similarity_score(list_a: &[i32], list_b: &[i32]) -> i32 {
     let hash_b: HashMap<i32, i32> = list_b.iter().fold(HashMap::new(), |mut acc, &b| {
