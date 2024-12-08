@@ -10,8 +10,7 @@ pub fn run(input: &str) {
         println!("{}: {:?}", frequency, positions);
         for i in 0..positions.len() {
             for j in i + 1..positions.len() {
-                let (antinode_a, antinode_b) =
-                    find_antinodes(dimensions, positions[i], positions[j]);
+                let (antinode_a, antinode_b) = find_antinodes(positions[i], positions[j]);
                 if is_valid_antinodes(dimensions, antinode_a) {
                     println!("Valid antinode: {:?}", antinode_a);
                     antinodes.insert(antinode_a);
@@ -52,41 +51,21 @@ fn get_frequencies(input: &str) -> HashMap<char, Vec<(i32, i32)>> {
 }
 
 fn is_valid_antinodes(grid_size: (i32, i32), antinode_coordinates: (i32, i32)) -> bool {
-    // make sure the antinode is within the grid
     antinode_coordinates.0 >= 0
         && antinode_coordinates.0 < grid_size.0
         && antinode_coordinates.1 >= 0
         && antinode_coordinates.1 < grid_size.1
 }
 
-fn find_node_distance(grid_size: (i32, i32), first: (i32, i32), second: (i32, i32)) -> i32 {
-    // Convert 2D coordinates to 1D index
-    let first_index = (first.0 * grid_size.1) + first.1;
-    let second_index = (second.0 * grid_size.1) + second.1;
-
-    // Get absolute difference
-    (second_index - first_index).abs()
+fn find_node_distance(first: (i32, i32), second: (i32, i32)) -> i32 {
+    ((second.0 - first.0).abs() + (second.1 - first.1).abs())
 }
+fn find_antinodes(frequency_a: (i32, i32), frequency_b: (i32, i32)) -> ((i32, i32), (i32, i32)) {
+    let dx = frequency_b.0 - frequency_a.0;
+    let dy = frequency_b.1 - frequency_a.1;
 
-fn find_antinodes(
-    grid_size: (i32, i32),
-    frequency_a: (i32, i32),
-    frequency_b: (i32, i32),
-) -> ((i32, i32), (i32, i32)) {
-    let distance = find_node_distance(grid_size, frequency_a, frequency_b);
+    let antinode_a = (frequency_b.0 + dx, frequency_b.1 + dy);
+    let antinode_b = (frequency_a.0 - dx, frequency_a.1 - dy);
 
-    let positive = walk_to_coordinate(grid_size, frequency_b, distance);
-    let negative = walk_to_coordinate(grid_size, frequency_a, -distance);
-    (positive, negative)
-}
-
-fn walk_to_coordinate(grid_size: (i32, i32), start: (i32, i32), positions: i32) -> (i32, i32) {
-    // Calculate total grid positions
-    let total_pos = start.0 * grid_size.1 + start.1 + positions;
-
-    // Calculate new row and column
-    let row = total_pos / grid_size.1;
-    let column = total_pos % grid_size.1;
-
-    (row, column)
+    (antinode_a, antinode_b)
 }
